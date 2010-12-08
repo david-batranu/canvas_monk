@@ -1,0 +1,15 @@
+{% extends 'physics/base.html' %}
+{% block head %}
+    <title>Canvas</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/physics/canvas.js"></script>
+    
+{% endblock %}
+
+{% block body %}
+    <h1>Canvas</h1>
+    <canvas id="surface" width="640" height="480" style="border: 1px solid black;"></canvas>
+
+    <input type="button" id="reset" value="RESET!"/>
+    <input type="button" id="add_block" value="Add Block"/>
+{% endblock %}
