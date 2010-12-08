@@ -1,6 +1,6 @@
 $(document).ready(function() {
     function drawPoly(ctx, parray, color){
-        ctx.fillStyle = 'rgba(' + color[0] + ', ' + color[1] + ', ' + color[2] + ', 0.5)';
+        ctx.fillStyle = getColor(color);
         ctx.beginPath();
         for (var i=0;i<parray.length;i++) {
             var p = parray[i];
@@ -13,6 +13,12 @@ $(document).ready(function() {
         }
         ctx.fill();
     }
+    function drawCircle(ctx, posx, posy, radius, color) {
+        //ctx.fillStyle = getColor(color);
+        ctx.beginPath();
+        ctx.arc(posx, posy, radius, degToRad(0), degToRad(360));
+        ctx.fill();
+    }
     function draw(ctx) {
         $.getJSON('/canvas/physics/scene_data', function(data) {
             ctx.clearRect(0, 0, 640, 480);
@@ -21,11 +27,22 @@ $(document).ready(function() {
                 var color = data["poly"][i].slice(4)[0];
                 drawPoly(ctx, parray, color);
             }
+            for (var i=0;i<data["circle"].length;i++) {
+                var posx = data["circle"][i][0];
+                var posy = data["circle"][i][1];
+                var radius = data["circle"][i][2];
+                var color = data["circle"][i][3];
+                drawCircle(ctx, posx, posy, radius, color);
+            }
         });
     }
 
-    function randRange(lowVal,highVal) {
-         return Math.floor(Math.random()*(highVal-lowVal+1))+lowVal;
+    function getColor(color){
+        return 'rgba(' + color[0] + ', ' + color[1] + ', ' + color[2] + ', 0.5)';
+    }
+
+    function degToRad(deg) {
+        return (Math.PI/180)*deg;
     }
 
     function init() {
@@ -37,17 +54,17 @@ $(document).ready(function() {
             alert('Canvas not supported!');
         }
     }
-    init();
-
-
     $('#add_block').click(function() {
         var block = [300, 250, 50, 50];
         $.post('/canvas/physics/add_block', {poly: JSON.stringify(block)})
+    })
+    $('#add_circle').click(function() {
+        var circle = [300, 250, 25];
+        $.post('/canvas/physics/add_circle', {circle: JSON.stringify(circle)})
     })
     $('#reset').click(function() {
         $.post('/canvas/physics/reset');
     })
 
-
-
+    init();
 });

@@ -1,10 +1,14 @@
 import pymunk
 import json
+from math import pi
 from random import randrange
 
 
 def to_pygame(p):
     return int(p.x), int(-p.y+480)
+
+def random_color():
+    return randrange(255), randrange(255), randrange(255)
 
 class Block(object):
     def __init__(self, space, posx, posy, width, height, static=False):
@@ -22,13 +26,32 @@ class Block(object):
         self.contour = contour
         self.body = body
         self.contour.friction = .5
-        self.color = randrange(255), randrange(255), randrange(255)
+        self.color = random_color()
 
     def dump(self):
-        pointlist = [to_pygame(point) for point in self.contour.get_points()]
-        pointlist.append(self.color)
-        return pointlist
+        datasheet = [to_pygame(point) for point in self.contour.get_points()]
+        datasheet.append(self.color)
+        return datasheet
 
+class Circle(object):
+    def __init__(self, space, pos_x, pos_y, radius):
+        density = .0007
+        mass = density * (pi * (radius ** 2))
+        inertia = pymunk.moment_for_circle(mass, 0, radius, (0,0))
+        body = pymunk.Body(mass, inertia)
+        body.position = (pos_x, pos_y)
+        contour = pymunk.Circle(body, radius, (0, 0))
+        space.add(body, contour)
+        self.contour = contour
+        self.body = body
+        self.color = random_color()
+
+    def dump(self):
+        datasheet = []
+        datasheet.extend(to_pygame(self.body.position))
+        datasheet.append(self.contour.radius)
+        datasheet.append(self.color)
+        return datasheet
 
 class Physics(object):
     pymunk.init_pymunk()
@@ -39,6 +62,10 @@ class Physics(object):
     def add_block(self, *args):
         block = Block(self.space, *args)
         self.objects.append(block)
+
+    def add_circle(self, *args):
+        circle = Circle(self.space, *args)
+        self.objects.append(circle)
 
     def rm_obj(self, obj):
         self.space.remove(obj.contour)
@@ -63,7 +90,7 @@ class Physics(object):
         for obj in self.objects:
             if isinstance(obj, Block):
                 dump['poly'].append(obj.dump())
-            else:
+            elif isinstance(obj, Circle):
                 dump['circle'].append(obj.dump())
         return dump
 

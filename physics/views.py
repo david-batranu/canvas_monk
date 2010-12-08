@@ -21,6 +21,11 @@ def add_block(request):
     phy.add_block(*specs)
     return HttpResponse('OK!')
 
+def add_circle(request):
+    specs = json.loads(request.POST.get('circle'))
+    phy.add_circle(*specs)
+    return HttpResponse('OK!')
+
 def reset_scene(request):
     phy.reset()
     add_blocks()
