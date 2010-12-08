@@ -1,7 +1,11 @@
 # Django settings for canvas project.
+import os
+
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+
+PROJECT_ROOT = os.path.dirname(__file__)
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
@@ -35,7 +39,8 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = 'D:/dev/canvas/canvas/media'
+
+MEDIA_ROOT = PROJECT_ROOT + '/media/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -65,7 +70,7 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'canvas.urls'
 
-TEMPLATE_DIRS = ('D:/dev/canvas/canvas/templates',)
+TEMPLATE_DIRS = (PROJECT_ROOT + '/templates',)
 
 INSTALLED_APPS = (
     'django.contrib.auth',

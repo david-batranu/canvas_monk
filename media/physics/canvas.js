@@ -14,7 +14,7 @@ $(document).ready(function() {
         ctx.fill();
     }
     function drawCircle(ctx, posx, posy, radius, color) {
-        //ctx.fillStyle = getColor(color);
+        ctx.fillStyle = getColor(color);
         ctx.beginPath();
         ctx.arc(posx, posy, radius, degToRad(0), degToRad(360));
         ctx.fill();
