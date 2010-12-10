@@ -16,11 +16,11 @@ $(document).ready(function() {
     function drawCircle(ctx, posx, posy, radius, color) {
         ctx.fillStyle = getColor(color);
         ctx.beginPath();
-        ctx.arc(posx, posy, radius, degToRad(0), degToRad(360));
+        ctx.arc(posx, posy, radius, degToRad(0), degToRad(360), false);
         ctx.fill();
     }
     function draw(ctx) {
-        $.getJSON('/canvas/physics/scene_data', function(data) {
+        $.getJSON('./scene_data', function(data) {
             ctx.clearRect(0, 0, 640, 480);
             for (var i=0;i<data["poly"].length;i++) {
                 var parray = data["poly"][i].slice(0,4);
@@ -56,14 +56,14 @@ $(document).ready(function() {
     }
     $('#add_block').click(function() {
         var block = [300, 250, 50, 50];
-        $.post('/canvas/physics/add_block', {poly: JSON.stringify(block)})
+        $.post('./add_block', {poly: JSON.stringify(block)})
     })
     $('#add_circle').click(function() {
         var circle = [300, 250, 25];
-        $.post('/canvas/physics/add_circle', {circle: JSON.stringify(circle)})
+        $.post('./add_circle', {circle: JSON.stringify(circle)})
     })
     $('#reset').click(function() {
-        $.post('/canvas/physics/reset');
+        $.post('./reset');
     })
 
     init();
