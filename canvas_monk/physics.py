@@ -54,7 +54,12 @@ class Circle(object):
         return datasheet
 
 class Physics(object):
-    pymunk.init_pymunk()
+    try:
+        #old pymunk
+        pymunk.init_pymunk()
+    except AttributeError:
+        #new pymunk
+        pass
     space = pymunk.Space()
     space.gravity = (0.0, -900.0)
     objects = []
